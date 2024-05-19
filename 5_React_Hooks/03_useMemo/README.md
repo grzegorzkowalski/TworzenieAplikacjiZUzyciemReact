@@ -1,159 +1,141 @@
-#### Zadanie 1: Lista zadań z funkcją dodawania zoptymalizowaną za pomocą useCallback
+#### Zadanie 2: Kalkulator sumy liczb z memoizacją wyniku za pomocą useMemo
 
-1. Stwórz plik `TodoList.tsx`.
-1. Stwórz komponent `TodoItem`, który będzie reprezentował pojedyncze zadanie.
+1. Utwórz nowy plik i nazwij go `SumCalculator.tsx`.
+1. Stwórz komponent `SumCalculator`, który będzie zarządzał listą liczb i używał useMemo do optymalizacji obliczeń sumy.
 ```js
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 
-interface TodoItemProps {
-  text: string;
-  onRemove: () => void;
-}
+const SumCalculator: React.FC = () => {
+  const [numbers, setNumbers] = useState<number[]>([]);
+  const [newNumber, setNewNumber] = useState<string>('');
 
-const TodoItem: React.FC<TodoItemProps> = ({ text, onRemove }) => {
-  return (
-    <li>
-      {text}
-      <button onClick={onRemove}>Usuń</button>
-    </li>
-  );
-};
-
-export default React.memo(TodoItem);
-```
-1. Stwórz komponent `TodoList`, który będzie zarządzał listą zadań i używał `useCallback` do optymalizacji funkcji dodawania i usuwania zadań.
-```js
-import React, { useState, useCallback } from 'react';
-import TodoItem from './TodoItem';
-
-interface Todo {
-  id: number;
-  text: string;
-}
-
-const TodoList: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [newTodo, setNewTodo] = useState<string>('');
-
-  const addTodo = useCallback(() => {
-    if (newTodo.trim() !== '') {
-      setTodos(prevTodos => [...prevTodos, { id: Date.now(), text: newTodo }]);
-      setNewTodo('');
+  const addNumber = () => {
+    const num = parseFloat(newNumber);
+    if (!isNaN(num)) {
+      setNumbers(prevNumbers => [...prevNumbers, num]);
+      setNewNumber('');
     }
-  }, [newTodo]);
+  };
 
-  const removeTodo = useCallback((id: number) => {
-    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
-  }, []);
+  const sum = useMemo(() => {
+    console.log('Calculating sum...');
+    return numbers.reduce((acc, num) => acc + num, 0);
+  }, [numbers]);
 
   return (
     <div>
-      <h1>Lista zadań</h1>
-      <input
-        type="text"
-        value={newTodo}
-        onChange={(e) => setNewTodo(e.target.value)}
-        placeholder="Nowe zadanie"
-      />
-      <button onClick={addTodo}>Dodaj</button>
+      <h1>Kalkulator sumy liczb</h1>
+      <div>
+        <input
+          type="text"
+          value={newNumber}
+          onChange={(e) => setNewNumber(e.target.value)}
+          placeholder="Dodaj liczbę"
+        />
+        <button onClick={addNumber}>Dodaj</button>
+      </div>
+      <p>Suma: {sum}</p>
       <ul>
-        {todos.map(todo => (
-          <TodoItem
-            key={todo.id}
-            text={todo.text}
-            onRemove={() => removeTodo(todo.id)}
-          />
+        {numbers.map((num, index) => (
+          <li key={index}>{num}</li>
         ))}
       </ul>
     </div>
   );
 };
 
-export default TodoList;
+export default SumCalculator;
 ```
-1. Użyj komponentu `TodoList` wewnątrz głównego komponentu aplikacji.
+1. Użyj komponentu `SumCalculator` wewnątrz głównego komponentu aplikacji.
 ```js
 import React from 'react';
-import TodoList from './TodoList';
+import SumCalculator from './SumCalculator';
 
 const App: React.FC = () => {
-  return (
-    <div>
-      <TodoList />
-    </div>
-  );
+return (
+<div>
+<SumCalculator />
+</div>
+);
 };
 
 export default App;
 ```
 
-#### Zadanie 2: Formularz z użyciem useCallback do obsługi zdarzeń
+#### Zadanie 2: Kalkulator kosztów podróży z użyciem useMemo.
 
-1. Utwórz nowy plik i nazwij go `ContactForm.tsx`.
-1. Stwórz komponent `ContactForm`, który będzie zarządzał stanem formularza i używał `useCallback` do optymalizacji funkcji obsługi zdarzeń.
+1. Utwórz nowy plik i nazwij go `TravelCostCalculator.tsx`.
+1. Stwórz komponent `TravelCostCalculator`, który będzie zarządzał danymi wejściowymi podróży i używał `useMemo` do optymalizacji obliczeń kosztów podróży.
 ```js
-import React, { useState, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
 
-interface FormState {
-  name: string;
-  email: string;
-  message: string;
-}
+const TravelCostCalculator: React.FC = () => {
+  const [distance, setDistance] = useState<string>('');
+  const [fuelEfficiency, setFuelEfficiency] = useState<string>('');
+  const [fuelPrice, setFuelPrice] = useState<string>('');
 
-const ContactForm: React.FC = () => {
-  const [formData, setFormData] = useState<FormState>({ name: '', email: '', message: '' });
+  const handleDistanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDistance(e.target.value);
+  };
 
-  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.target;
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  }, []);
+  const handleFuelEfficiencyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFuelEfficiency(e.target.value);
+  };
 
-  const handleSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log('Form submitted:', formData);
-    setFormData({ name: '', email: '', message: '' });
-  }, [formData]);
+  const handleFuelPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFuelPrice(e.target.value);
+  };
+
+  const travelCost = useMemo(() => {
+    console.log('Calculating travel cost...');
+    const dist = parseFloat(distance);
+    const eff = parseFloat(fuelEfficiency);
+    const price = parseFloat(fuelPrice);
+    
+    if (isNaN(dist) || isNaN(eff) || isNaN(price) || eff === 0) {
+      return 0;
+    }
+
+    return (dist / eff) * price;
+  }, [distance, fuelEfficiency, fuelPrice]);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Formularz kontaktowy</h1>
+    <div>
+      <h1>Kalkulator kosztów podróży</h1>
       <div>
         <label>
-          Imię:
-          <input type="text" name="name" value={formData.name} onChange={handleChange} />
+          Odległość (km):
+          <input type="text" value={distance} onChange={handleDistanceChange} />
         </label>
       </div>
       <div>
         <label>
-          Email:
-          <input type="email" name="email" value={formData.email} onChange={handleChange} />
+          Spalanie (l/100km):
+          <input type="text" value={fuelEfficiency} onChange={handleFuelEfficiencyChange} />
         </label>
       </div>
       <div>
         <label>
-          Wiadomość:
-          <textarea name="message" value={formData.message} onChange={handleChange}></textarea>
+          Cena paliwa (zł/l):
+          <input type="text" value={fuelPrice} onChange={handleFuelPriceChange} />
         </label>
       </div>
-      <button type="submit">Wyślij</button>
-    </form>
+      <p>Koszt podróży: {travelCost.toFixed(2)} zł</p>
+    </div>
   );
 };
 
-export default ContactForm;
+export default TravelCostCalculator;
 ```
-1. Użyj komponentu `ContactForm` wewnątrz głównego komponentu aplikacji.
+1. Użyj komponentu `TravelCostCalculator` wewnątrz głównego komponentu aplikacji.
 ```js
 import React from 'react';
-import ContactForm from './ContactForm';
+import TravelCostCalculator from './TravelCostCalculator';
 
 const App: React.FC = () => {
   return (
     <div>
-      <ContactForm />
+      <TravelCostCalculator />
     </div>
   );
 };

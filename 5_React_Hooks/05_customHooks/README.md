@@ -1,84 +1,107 @@
-#### Zadanie 1 Focusing Input z useRef
+#### Zadanie: Tworzenie Custom Hook do Zarządzania Formularzem z TypeScript
 
-1. Utwórz nowy plik i nazwij go `FocusInput.tsx`.
-1. Stwórz komponent `FocusInput`, który będzie zarządzał refem do elementu <input> i używał useRef do zarządzania jego fokusem.
+1. Utwórz nowy katalog i nazwij go `hooks`.
+1. W katalogu `hooks`, utwórz nowy plik i nazwij go `useForm.ts`.
+1. Stwórz niestandardowy hook `useForm`, który będzie zarządzał stanem formularza.
 ```js
-import React, { useRef } from 'react';
+import { useState, ChangeEvent } from 'react';
 
-const FocusInput: React.FC = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
+interface FormState {
+  [key: string]: any;
+}
 
-  const handleFocus = () => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
+type HandleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+
+function useForm(initialState: FormState): [FormState, HandleChange, () => void] {
+  const [formState, setFormState] = useState<FormState>(initialState);
+
+  const handleChange: HandleChange = (event) => {
+    const { name, value } = event.target;
+    setFormState(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const resetForm = () => {
+    setFormState(initialState);
+  };
+
+  return [formState, handleChange, resetForm];
+}
+
+export default useForm;
+```
+1. Utwórz nowy plik i nazwij go `ContactForm.tsx`.
+1. Stwórz komponent `ContactForm`, który będzie korzystał z niestandardowego hooka `useForm`.
+```js
+import React from 'react';
+import useForm from './hooks/useForm';
+
+const ContactForm: React.FC = () => {
+  const [formState, handleChange, resetForm] = useForm({
+    name: '',
+    email: '',
+    message: '',
+  });
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('Form submitted:', formState);
+    resetForm();
   };
 
   return (
-    <div>
-      <h1>Focus Input Field</h1>
-      <input ref={inputRef} type="text" placeholder="Kliknij przycisk, aby skupić" />
-      <button onClick={handleFocus}>Skup</button>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <h1>Formularz kontaktowy</h1>
+      <div>
+        <label>
+          Imię:
+          <input
+            type="text"
+            name="name"
+            value={formState.name}
+            onChange={handleChange}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Email:
+          <input
+            type="email"
+            name="email"
+            value={formState.email}
+            onChange={handleChange}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Wiadomość:
+          <textarea
+            name="message"
+            value={formState.message}
+            onChange={handleChange}
+          ></textarea>
+        </label>
+      </div>
+      <button type="submit">Wyślij</button>
+    </form>
   );
 };
 
-export default FocusInput;
+export default ContactForm;
 ```
-1. Użyj komponent `FocusInput` wewnątrz głównego komponentu aplikacji.
+1. Użyj komponentu `ContactForm` wewnątrz głównego komponentu aplikacji.
 ```js
 import React from 'react';
-import FocusInput from './FocusInput';
+import ContactForm from './ContactForm';
 
 const App: React.FC = () => {
   return (
     <div>
-      <FocusInput />
-    </div>
-  );
-};
-
-export default App;
-```
-
-#### Zadanie 2: Zapamiętywanie wartości między renderami za pomocą useRef
-
-1. Utwórz nowy plik i nazwij go `ClickCounter.tsx`.
-1. Stwórz komponent `ClickCounter`, który będzie liczył liczbę kliknięć przycisku bez wpływu na ponowne renderowanie komponentu.
-```js
-import React, { useState, useRef } from 'react';
-
-const ClickCounter: React.FC = () => {
-  const [count, setCount] = useState<number>(0);
-  const clickCountRef = useRef<number>(0);
-
-  const handleClick = () => {
-    setCount(prevCount => prevCount + 1);
-    clickCountRef.current += 1;
-    console.log(`Przycisk kliknięty ${clickCountRef.current} razy`);
-  };
-
-  return (
-    <div>
-      <h1>Click Counter</h1>
-      <p>Liczba kliknięć: {count}</p>
-      <button onClick={handleClick}>Kliknij mnie</button>
-    </div>
-  );
-};
-
-export default ClickCounter;
-```
-
-1. Użyj komponentu `ClickCounter` wewnątrz głównego komponentu aplikacji.
-```js
-import React from 'react';
-import ClickCounter from './ClickCounter';
-
-const App: React.FC = () => {
-  return (
-    <div>
-      <ClickCounter />
+      <ContactForm />
     </div>
   );
 };

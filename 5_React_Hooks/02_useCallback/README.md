@@ -1,159 +1,68 @@
-#### Zadanie 1: Licznik z wykorzystaniem useReducer
+#### Zadanie 1: Lista zadań z funkcją dodawania zoptymalizowaną za pomocą useCallback
 
-1. W katalogu `components`, utwórz nowy plik i nazwij go `Counter.tsx`.
-1. W tym pliku zaimplementujemy nasz nowy komponent licznika.
-1. W pliku `Counter.tsx` zdefiniuj typ stanu, który będzie przechowywał wartość licznika. 
-```
-interface CounterState {
-  count: number;
-}
-```
-1. Zdefiniuj typ akcji, który będzie określał możliwe operacje na stanie licznika.
-```
-type CounterAction = 
-  | { type: 'increment' }
-  | { type: 'decrement' }
-  | { type: 'reset' };
-```
-1. Zaimplementuj funkcję reduktora, która będzie zarządzała zmianami stanu w zależności od typu akcji.
-```
-const reducer = (state: CounterState, action: CounterAction): CounterState => {
-  switch (action.type) {
-    case 'increment':
-      return { count: state.count + 1 };
-    case 'decrement':
-      return { count: state.count - 1 };
-    case 'reset':
-      return { count: 0 };
-    default:
-      throw new Error('Nieznany typ akcji');
-  }
-};
-```
-1. Stwórz funkcjonalny komponent Counter, który będzie korzystał z hooka useReducer do zarządzania stanem.
-```
-import React, { useReducer } from 'react';
-
-const Counter: React.FC = () => {
-  const initialState: CounterState = { count: 0 };
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  return (
-    <div>
-      <h1>Licznik: {state.count}</h1>
-      <button onClick={() => dispatch({ type: 'increment' })}>Zwiększ</button>
-      <button onClick={() => dispatch({ type: 'decrement' })}>Zmniejsz</button>
-      <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
-    </div>
-  );
-};
-
-export default Counter;
-```
-1. Zaimportuj i użyj komponentu `Counter` w pliku `App.tsx`.
-1. Użyj komponentu `Counter` wewnątrz głównego komponentu aplikacji.
-```
+1. Stwórz plik `TodoList.tsx`.
+1. Stwórz komponent `TodoItem`, który będzie reprezentował pojedyncze zadanie.
+```js
 import React from 'react';
-import Counter from './Counter';
 
-const App: React.FC = () => {
+interface TodoItemProps {
+  text: string;
+  onRemove: () => void;
+}
+
+const TodoItem: React.FC<TodoItemProps> = ({ text, onRemove }) => {
   return (
-    <div>
-      <Counter />
-    </div>
+    <li>
+      {text}
+      <button onClick={onRemove}>Usuń</button>
+    </li>
   );
 };
 
-export default App;
+export default React.memo(TodoItem);
 ```
+1. Stwórz komponent `TodoList`, który będzie zarządzał listą zadań i używał `useCallback` do optymalizacji funkcji dodawania i usuwania zadań.
+```js
+import React, { useState, useCallback } from 'react';
+import TodoItem from './TodoItem';
 
-#### Zadanie 2: Lista zadań (Todo List) z wykorzystaniem useReducer
-
-1. Stwórz plik `TodoList.tsx`:
-1. W katalogu `src`, utwórz nowy plik i nazwij go `TodoList.tsx`.
-1. W tym pliku zaimplementujemy nasz komponent listy zadań.
-1. W pliku `TodoList.tsx` zdefiniuj typ zadania, który będzie przechowywał informacje o każdym zadaniu.
-```
 interface Todo {
   id: number;
   text: string;
-  completed: boolean;
 }
-```
-1. Zdefiniuj typ stanu, który będzie przechowywał listę zadań.
-```
-interface TodoState {
-  todos: Todo[];
-}
-```
-1. Zdefiniuj typ akcji, który będzie określał możliwe operacje na liście zadań.
-```
-type TodoAction =
-  | { type: 'add'; payload: string }
-  | { type: 'remove'; payload: number }
-  | { type: 'toggle'; payload: number };
-```
-1. Zaimplementuj funkcję reduktora, która będzie zarządzała zmianami stanu w zależności od typu akcji.
-```
-const reducer = (state: TodoState, action: TodoAction): TodoState => {
-  switch (action.type) {
-    case 'add':
-      const newTodo: Todo = {
-        id: Date.now(),
-        text: action.payload,
-        completed: false,
-      };
-      return { todos: [...state.todos, newTodo] };
-    case 'remove':
-      return { todos: state.todos.filter(todo => todo.id !== action.payload) };
-    case 'toggle':
-      return {
-        todos: state.todos.map(todo =>
-          todo.id === action.payload
-            ? { ...todo, completed: !todo.completed }
-            : todo
-        ),
-      };
-    default:
-      throw new Error('Nieznany typ akcji');
-  }
-};
-```
-1. Stwórz funkcjonalny komponent TodoList, który będzie korzystał z hooka useReducer do zarządzania stanem listy zadań.
-```
-import React, { useReducer, useState } from 'react';
 
 const TodoList: React.FC = () => {
-  const initialState: TodoState = { todos: [] };
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const [newTodoText, setNewTodoText] = useState('');
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [newTodo, setNewTodo] = useState<string>('');
 
-  const handleAddTodo = () => {
-    if (newTodoText.trim() !== '') {
-      dispatch({ type: 'add', payload: newTodoText });
-      setNewTodoText('');
+  const addTodo = useCallback(() => {
+    if (newTodo.trim() !== '') {
+      setTodos(prevTodos => [...prevTodos, { id: Date.now(), text: newTodo }]);
+      setNewTodo('');
     }
-  };
+  }, [newTodo]);
+
+  const removeTodo = useCallback((id: number) => {
+    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+  }, []);
 
   return (
     <div>
       <h1>Lista zadań</h1>
       <input
         type="text"
-        value={newTodoText}
-        onChange={(e) => setNewTodoText(e.target.value)}
+        value={newTodo}
+        onChange={(e) => setNewTodo(e.target.value)}
         placeholder="Nowe zadanie"
       />
-      <button onClick={handleAddTodo}>Dodaj</button>
+      <button onClick={addTodo}>Dodaj</button>
       <ul>
-        {state.todos.map(todo => (
-          <li key={todo.id} style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
-            {todo.text}
-            <button onClick={() => dispatch({ type: 'toggle', payload: todo.id })}>
-              {todo.completed ? 'Oznacz jako nieukończone' : 'Oznacz jako ukończone'}
-            </button>
-            <button onClick={() => dispatch({ type: 'remove', payload: todo.id })}>Usuń</button>
-          </li>
+        {todos.map(todo => (
+          <TodoItem
+            key={todo.id}
+            text={todo.text}
+            onRemove={() => removeTodo(todo.id)}
+          />
         ))}
       </ul>
     </div>
@@ -162,8 +71,8 @@ const TodoList: React.FC = () => {
 
 export default TodoList;
 ```
-1. Użyj komponentu TodoList wewnątrz głównego komponentu aplikacji.
-```
+1. Użyj komponentu `TodoList` wewnątrz głównego komponentu aplikacji.
+```js
 import React from 'react';
 import TodoList from './TodoList';
 
@@ -171,6 +80,80 @@ const App: React.FC = () => {
   return (
     <div>
       <TodoList />
+    </div>
+  );
+};
+
+export default App;
+```
+
+#### Zadanie 2: Formularz z użyciem useCallback do obsługi zdarzeń
+
+1. Utwórz nowy plik i nazwij go `ContactForm.tsx`.
+1. Stwórz komponent `ContactForm`, który będzie zarządzał stanem formularza i używał `useCallback` do optymalizacji funkcji obsługi zdarzeń.
+```js
+import React, { useState, useCallback } from 'react';
+
+interface FormState {
+  name: string;
+  email: string;
+  message: string;
+}
+
+const ContactForm: React.FC = () => {
+  const [formData, setFormData] = useState<FormState>({ name: '', email: '', message: '' });
+
+  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  }, []);
+
+  const handleSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('Form submitted:', formData);
+    setFormData({ name: '', email: '', message: '' });
+  }, [formData]);
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <h1>Formularz kontaktowy</h1>
+      <div>
+        <label>
+          Imię:
+          <input type="text" name="name" value={formData.name} onChange={handleChange} />
+        </label>
+      </div>
+      <div>
+        <label>
+          Email:
+          <input type="email" name="email" value={formData.email} onChange={handleChange} />
+        </label>
+      </div>
+      <div>
+        <label>
+          Wiadomość:
+          <textarea name="message" value={formData.message} onChange={handleChange}></textarea>
+        </label>
+      </div>
+      <button type="submit">Wyślij</button>
+    </form>
+  );
+};
+
+export default ContactForm;
+```
+1. Użyj komponentu `ContactForm` wewnątrz głównego komponentu aplikacji.
+```js
+import React from 'react';
+import ContactForm from './ContactForm';
+
+const App: React.FC = () => {
+  return (
+    <div>
+      <ContactForm />
     </div>
   );
 };
