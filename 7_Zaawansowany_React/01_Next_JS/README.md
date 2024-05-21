@@ -44,7 +44,7 @@ const About: React.FC = () => {
 
 export default About;
 ```
-1. Stwórz komponent nagłówka. 
+1. Stwórz komponent nagłówka.
 1. Utwórz katalog components w katalogu src i utwórz plik `Header`.tsx w tym katalogu.
 1. Dodaj poniższy kod do pliku `components/Header.tsx`.
 ```js

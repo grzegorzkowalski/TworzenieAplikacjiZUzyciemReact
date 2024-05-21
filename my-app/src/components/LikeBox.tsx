@@ -1,10 +1,13 @@
-import {FC} from "react";
+import React, {JSX, useState} from 'react';
 
-const LikeBox : FC<{likes: number}> = ({likes}) : JSX.Element => {
+const LikeBox : React.FC<{num: number}> = ({num}) : JSX.Element => {
+    const [counter, setCounter] = useState<number>(0);
     return (
-        <button>
-            Liczba polubień: {likes}
-        </button>
+        <div>
+            <p>{num} likes</p>
+            <p>{counter} likes</p>
+            <button onClick={() => setCounter(prev => prev + 1)}>Polub</button>
+        </div>
     );
 };
 

@@ -1,12 +1,12 @@
 //Zadanie 2
 
-const Person : {
+const person : {
     name: string,
     lastName: string,
     age: number,
     sex: [string],
     profession: string,
-    skills: readonly string[]
+    skills: ReadonlyArray<string>;
 } = {
     name: "Grzegorz",
     lastName: "Kowalski",
@@ -15,9 +15,9 @@ const Person : {
     profession: "programista",
     skills: ["sztuki walki"]
 }
-
-Person.skills.push("programowanie");
-console.log(Person.skills);
+//person.skills = [];
+//person.skills.push("programowanie");
+console.log(person.skills);
 
 //Stwórz funkcję, która przyjmuje tablicę liczb i zwraca ich średnią (użyj obiektu Math i metody round).
 // Otypuj parametry funkcji i zwracaną wartość.
@@ -44,7 +44,7 @@ interface IUser {
     surname: string,
     age: number,
     sex?: "male" | "female",
-    hobby: ["programowanie", "moda", "muzyka"],
+    hobby: Array<string>,
     city?: string,
     returnName: Function,
 }
@@ -55,5 +55,5 @@ interface IAddressAndPhone extends IUser {
 }
 
 
-export {Person, avg};
+export {person, avg};
 export type {IAddressAndPhone}

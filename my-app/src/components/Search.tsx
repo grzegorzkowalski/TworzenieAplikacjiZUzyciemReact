@@ -1,10 +1,12 @@
-import { FC } from "react";
+import {JSX, FC} from 'react';
 
-const Search : FC = () : JSX.Element => {
+const Search: FC = () : JSX.Element => {
     return (
         <div>
-            <input />
-            <button>Szukaj</button>
+            <label>
+                Wyszukaj
+                <input />
+            </label>
         </div>
     );
 };

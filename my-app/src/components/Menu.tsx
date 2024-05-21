@@ -1,21 +1,16 @@
-import {FC, JSX} from "react";
+import React, {JSX} from 'react';
 
-type ListElement = {
-    name: string,
-    link: string
-}
-
-const Menu : FC<{menu: Array<ListElement>}> = ({menu}) : JSX.Element => {
+const Menu : React.FC = () : JSX.Element => {
     return (
-        <ul>
-            {
-                menu.map((el) => {
-                    return <li key={el.name}><a href={el.link}>{el.name}</a></li>
-                })
-            }
-        </ul>
+        <div>
+            <ul>
+                <li><a href="/">Strona główna</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/cennik">Cennik</a></li>
+                <li><a href="/kontakt">Kontakt</a></li>
+            </ul>
+        </div>
     );
-}
+};
 
-export {Menu};
-export type { ListElement };
+export default Menu;
