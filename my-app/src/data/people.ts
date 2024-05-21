@@ -8,7 +8,7 @@ interface IAvatar {
   avatar: string
 }
 
-const users: IAvatar[]  = [
+const people: IAvatar[]  = [
   {
     id: 1,
     title: "Mrs.",
@@ -40,3 +40,6 @@ const users: IAvatar[]  = [
     avatar: "https://fwcdn.pl/fpo/91/13/299113/7332755.3.jpg"
   }
 ];
+
+export default people
+export type {IAvatar}

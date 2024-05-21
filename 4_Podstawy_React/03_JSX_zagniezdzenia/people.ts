@@ -1,4 +1,14 @@
-export default [
+interface IAvatar {
+  id: number,
+  title: string,
+  name: string,
+  surname: string,
+  pesel: number,
+  bio: string,
+  avatar: string
+}
+
+const users: IAvatar[]  = [
   {
     id: 1,
     title: "Mrs.",
