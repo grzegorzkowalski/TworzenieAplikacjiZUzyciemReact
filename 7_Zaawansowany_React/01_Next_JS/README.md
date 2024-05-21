@@ -1,12 +1,12 @@
-### Wprowadzenie do Next.js z TypeScript
+### Wprowadzenie do Next.js 14 z TypeScript
 
 1. Stwórz nowy projekt Next.js z TypeScript
 ```js
 npx create-next-app@latest my-next-app --typescript
 cd my-next-app
 ```
-1. W projekcie Next.js wszystkie strony umieszczone są w katalogu `pages`. Każdy plik w tym katalogu odpowiada jednej stronie aplikacji.
-1. Stwórz stronę główną. Otwórz plik `pages/index.tsx` i zastąp jego zawartość poniższym kodem,
+1. W projekcie Next.js wszystkie strony umieszczone są w katalogu `app` od wersji 14 Next. Każdy folder ze stroną page.tsx w tym katalogu odpowiada jednej stronie aplikacji.
+1. Stwórz stronę główną. Otwórz plik `app/page.tsx` i zastąp jego zawartość poniższym kodem,
 ```js
 import React from 'react';
 import Link from 'next/link';
@@ -17,7 +17,7 @@ const Home: React.FC = () => {
       <h1>Witaj w Next.js z TypeScript!</h1>
       <p>To jest strona główna.</p>
       <Link href="/about">
-        <a>Przejdź do strony O nas</a>
+        <span>Przejdź do strony O nas</span>
       </Link>
     </div>
   );
@@ -25,7 +25,7 @@ const Home: React.FC = () => {
 
 export default Home;
 ```
-1. Stwórz stronę "O nas". Utwórz plik `pages/about.tsx` i dodaj poniższy kod.
+1. Stwórz stronę "O nas". Utwórz plik `about/page.tsx` i dodaj poniższy kod.
 ```js
 import React from 'react';
 import Link from 'next/link';
@@ -36,7 +36,7 @@ const About: React.FC = () => {
       <h1>O nas</h1>
       <p>To jest strona "O nas".</p>
       <Link href="/">
-        <a>Przejdź do strony głównej</a>
+        <span>Przejdź do strony głównej</span>
       </Link>
     </div>
   );
@@ -44,7 +44,7 @@ const About: React.FC = () => {
 
 export default About;
 ```
-1. Stwórz komponent nagłówka. 
+1. Stwórz komponent nagłówka.
 1. Utwórz katalog components w katalogu src i utwórz plik `Header`.tsx w tym katalogu.
 1. Dodaj poniższy kod do pliku `components/Header.tsx`.
 ```js
@@ -75,27 +75,10 @@ const Header: React.FC = () => {
 export default Header;
 ```
 1. Dodaj nagłówek do stron.
-1. Otwórz plik `pages/_app.tsx` i zastąp jego zawartość poniższym kodem, aby dodać komponent nagłówka do każdej strony.
-```js
-import React from 'react';
-import { AppProps } from 'next/app';
-import Header from '../components/Header';
-import '../styles/globals.css';
-
-const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
-  return (
-    <>
-      <Header />
-      <Component {...pageProps} />
-    </>
-  );
-};
-
-export default MyApp;
-```
+   1. Otwórz plik `app/layout.tsx` i dodaj nagłówek powyżej children`, aby dodać komponent nagłówka do każdej strony.
 1. Dodaj style globalne.
-1. Utwórz plik `styles/globals.css` i dodaj poniższy kod CSS.
-```js
+1. Do pliku `globals.css` i dodaj poniższy kod CSS.
+```css
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -130,64 +113,30 @@ div {
   padding: 1em;
 }
 ```
-1. Stwórz stronę z Server-Side Rendering (SSR). Utwórz plik `pages/ssr.tsx` i dodaj poniższy kod.
+1. Stwórz stronę z Server-Side Rendering (SSR). Utwórz plik `app/ssr/page.tsx` i dodaj poniższy kod.
 ```js
-import React from 'react';
-import { GetServerSideProps } from 'next';
+// app/ssr/page.tsx
+import { FC } from 'react';
 
 interface SSRProps {
-  time: string;
+   time: string;
 }
 
-const SSRPage: React.FC<SSRProps> = ({ time }) => {
-  return (
-    <div>
-      <h1>Server-Side Rendering (SSR)</h1>
-      <p>Ta strona została wyrenderowana na serwerze o czasie: {time}</p>
-    </div>
-  );
+const fetchTime = async (): Promise<string> => {
+   return new Date().toLocaleString();
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const time = new Date().toLocaleString();
-  return {
-    props: {
-      time,
-    },
-  };
+const SSRPage: FC<SSRProps> = async () => {
+   const time = await fetchTime();
+   return (
+           <div>
+              <h1>Server-Side Rendering (SSR)</h1>
+              <p>Ta strona została wyrenderowana na serwerze o czasie: {time}</p>
+           </div>
+   );
 };
 
 export default SSRPage;
-```
-1. Stwórz stronę z Static Site Generation (SSG). Utwórz plik `pages/ssg.tsx` i dodaj poniższy kod.
-```js
-import React from 'react';
-import { GetStaticProps } from 'next';
-
-interface SSGProps {
-  time: string;
-}
-
-const SSGPage: React.FC<SSGProps> = ({ time }) => {
-  return (
-    <div>
-      <h1>Static Site Generation (SSG)</h1>
-      <p>Ta strona została wygenerowana statycznie o czasie: {time}</p>
-    </div>
-  );
-};
-
-export const getStaticProps: GetStaticProps = async () => {
-  const time = new Date().toLocaleString();
-  return {
-    props: {
-      time,
-    },
-    revalidate: 10, // Regeneracja strony co 10 sekund
-  };
-};
-
-export default SSGPage;
 ```
 1. W terminalu uruchom aplikację.
 ```js
@@ -198,4 +147,3 @@ npm run dev
    1. Strona główna: http://localhost:3000
    1. Strona "O nas": http://localhost:3000/about
    1. Strona SSR: http://localhost:3000/ssr
-   1. Strona SSG: http://localhost:3000/ssg
