@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {JSX} from 'react';
 import Link from 'next/link';
 
-const About: React.FC = () => {
+const About: React.FC = () : JSX.Element => {
     return (
         <div>
             <h1>O nas</h1>
