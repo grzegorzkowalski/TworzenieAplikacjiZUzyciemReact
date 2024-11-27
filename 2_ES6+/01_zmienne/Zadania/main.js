@@ -13,7 +13,7 @@ function testVars() {
 	const cat = "syjamski";
 	var chomik = "syryjski";
 }
-console.log("test");
+
 /*
 Wnioski:
 */

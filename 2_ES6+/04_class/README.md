@@ -1,6 +1,6 @@
 ## Zadanie 1
 
-Stwórz klasę abstrakcyjną `Vehicle`. Stwórz trzy obiekty:
+Stwórz klasę abstrakcyjną `Vehicle`. Stwórz trzy klasy dziedziczące i trzy obiekty:
 
 1. `boat`
 1. `car` 

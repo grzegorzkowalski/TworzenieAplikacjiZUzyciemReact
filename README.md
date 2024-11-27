@@ -37,8 +37,3 @@
 1. React Context
 1. Redux Toolkit Store (opcja)
 1. Przegląd alternatyw
-## Testowanie (opcja)
-1. Konfiguracja jest/vitest z Testing Library
-1. Przykłady użycia selektorów RTL
-1. Mockowanie zależności z jest
-1. Kiedy i co testować - omówienie
