@@ -6,6 +6,10 @@ import Box from "./components/06_Chapter/Box";
 import {person} from "./ts/tasks.ts";
 import links from "./data/links.js";
 import './App.css'
+import StrobeLight from "./components/06_Chapter/StrobeLight.tsx";
+import Clock from "./components/06_Chapter/Clock.tsx";
+import Buttons from "./components/07_Chapter/Buttons.tsx";
+import MagicBox from "./components/07_Chapter/MagicBox.tsx";
 
 function App() {
 
@@ -18,7 +22,13 @@ function App() {
         {/*<Calculator />*/}
         {/*<LikeBox likes={500} />*/}
         {/*<Menu menu={links} />*/}
-        <Box />
+        {/*<Box />*/}
+        <StrobeLight color="pink" frequency={500} />
+        <StrobeLight color="red" frequency={50} />
+        <StrobeLight color="gold" frequency={150} />
+        <Clock />
+        <Buttons />
+        <MagicBox />
     </>
   )
 }
