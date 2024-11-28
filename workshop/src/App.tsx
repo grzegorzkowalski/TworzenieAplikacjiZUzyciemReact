@@ -12,6 +12,7 @@ import Buttons from "./components/07_Chapter/Buttons.tsx";
 import MagicBox from "./components/07_Chapter/MagicBox.tsx";
 import Numbers from "./components/07_Chapter/Numbers.tsx";
 import ButtonCounter from "./components/08_Chapter/ButtonCounter.tsx";
+import NumberInfo from "./components/09_Chapter/NumberInfo.tsx";
 
 function App() {
 
@@ -33,6 +34,9 @@ function App() {
         {/*<MagicBox />*/}
         {/*<Numbers />*/}
         <ButtonCounter />
+      {
+        [1,2,5,7,10,16].map((el, i) => <NumberInfo num={el} />)
+      }
     </>
   )
 }
