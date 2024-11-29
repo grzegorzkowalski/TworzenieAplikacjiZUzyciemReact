@@ -58,12 +58,12 @@ const Header: React.FC = () => {
         <ul>
           <li>
             <Link href="/">
-              <a>Strona główna</a>
+              <span>Strona główna</span>
             </Link>
           </li>
           <li>
             <Link href="/about">
-              <a>O nas</a>
+              <span>O nas</span>
             </Link>
           </li>
         </ul>

@@ -20,6 +20,7 @@ import ParentComponent from "./components/zagniezdzenia/ParentComponent.tsx";
 import ShopItem from "./components/zagniezdzenia/ShopItem.tsx";
 import shopItem from "./data/shopItem";
 import CarList from "./components/formularze/CarList.tsx";
+import Ip from "./components/komunikacja/IP.tsx";
 
 function App() {
 
@@ -47,11 +48,12 @@ function App() {
       {/*<Counter />*/}
       {/*<TodoList />*/}
 
-      <TodoList />
-      <ContactForm />
-      <ParentComponent />
-      <ShopItem item={shopItem} />
-      <CarList />
+      {/*<TodoList />*/}
+      {/*<ContactForm />*/}
+      {/*<ParentComponent />*/}
+      {/*<ShopItem item={shopItem} />*/}
+      {/*<CarList />*/}
+        <Ip />
     </>
   )
 }
