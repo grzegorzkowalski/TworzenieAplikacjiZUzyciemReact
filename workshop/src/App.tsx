@@ -14,6 +14,12 @@ import Numbers from "./components/07_Chapter/Numbers.tsx";
 import ButtonCounter from "./components/08_Chapter/ButtonCounter.tsx";
 import NumberInfo from "./components/09_Chapter/NumberInfo.tsx";
 import Counter from "./components/useReducer/Counter.tsx";
+import TodoList from "./components/useCallback/TodoList.tsx";
+import ContactForm from "./components/useCallback/ContactForm.tsx";
+import ParentComponent from "./components/zagniezdzenia/ParentComponent.tsx";
+import ShopItem from "./components/zagniezdzenia/ShopItem.tsx";
+import shopItem from "./data/shopItem";
+import CarList from "./components/formularze/CarList.tsx";
 
 function App() {
 
@@ -36,9 +42,16 @@ function App() {
         {/*<Numbers />*/}
         <ButtonCounter />
       {
-        [1,2,5,7,10,16].map((el, i) => <NumberInfo num={el} />)
+        [1,2,5,7,10,16].map((el, i) => <NumberInfo num={el} key={el} />)
       }
-      <Counter />
+      {/*<Counter />*/}
+      {/*<TodoList />*/}
+
+      <TodoList />
+      <ContactForm />
+      <ParentComponent />
+      <ShopItem item={shopItem} />
+      <CarList />
     </>
   )
 }

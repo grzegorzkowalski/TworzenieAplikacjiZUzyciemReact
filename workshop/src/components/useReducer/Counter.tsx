@@ -1,26 +1,7 @@
-import React, {FC, Reducer, useReducer} from 'react';
+import React, {FC, useReducer} from 'react';
+import {CounterState} from "./interfaces/CounterState";
+import reducer from "./reducers/counterReducer";
 
-interface CounterState {
-    count: number;
-}
-
-type CounterAction =
-    | { type: 'increment' }
-    | { type: 'decrement' }
-    | { type: 'reset' };
-
-const reducer: Reducer<CounterState, CounterAction> = (state, action) => {
-    switch (action.type) {
-        case 'increment':
-            return { count: state.count + 1 };
-        case 'decrement':
-            return { count: state.count - 1 };
-        case 'reset':
-            return { count: 0 };
-        default:
-            throw new Error('Nieznany typ akcji');
-    }
-};
 
 const Counter : FC = () => {
     const initialState: CounterState = { count: 0 };

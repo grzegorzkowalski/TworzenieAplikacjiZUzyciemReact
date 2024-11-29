@@ -1,10 +1,5 @@
 #### Zadanie: Tworzenie Formularza Kontaktowego z React Hook Form i TypeScript
 
-1. Otwórz terminal i użyj `create-react-app` z flagą TypeScript, aby stworzyć nowy projekt.
-```js
-npx create-react-app my-app --template typescript
-cd my-app
-```
 1. Zainstaluj bibliotekę `react-hook-form`.
 ```js
 npm install react-hook-form
