@@ -1,11 +1,11 @@
-### Wprowadzenie do Next.js 14 z TypeScript
+### Wprowadzenie do Next.js 15 z TypeScript
 
 1. Stwórz nowy projekt Next.js z TypeScript
 ```js
 npx create-next-app@latest my-next-app --typescript
 cd my-next-app
 ```
-1. W projekcie Next.js wszystkie strony umieszczone są w katalogu `app` od wersji 14 Next. Każdy folder ze stroną page.tsx w tym katalogu odpowiada jednej stronie aplikacji.
+1. W projekcie Next.js wszystkie strony umieszczone są w katalogu `app` od wersji 15 Next. Każdy folder ze stroną page.tsx w tym katalogu odpowiada jednej stronie aplikacji.
 1. Stwórz stronę główną. Otwórz plik `app/page.tsx` i zastąp jego zawartość poniższym kodem,
 ```js
 import React from 'react';

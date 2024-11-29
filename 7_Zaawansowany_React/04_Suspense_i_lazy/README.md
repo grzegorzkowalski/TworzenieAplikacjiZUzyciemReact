@@ -80,10 +80,10 @@ const App: React.FC = () => {
         </nav>
         <Suspense fallback={<div>Ładowanie...</div>}>
           <Routes>
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/profile" component={Profile} />
-            <Route path="/settings" component={Settings} />
-            <Route path="/" exact>
+            <Route path="/dashboard" component={<Dashboard />} />
+            <Route path="/profile" component={<Profile />} />
+            <Route path="/settings" component={<Settings />} />
+            <Route path="/">
               <h1>Witaj w aplikacji z lazy loading!</h1>
             </Route>
           </Routes>
